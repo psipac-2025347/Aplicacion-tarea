@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import process from 'process';
-import clienteRoutes from './routes/cliente,routes';
+import clienteRoutes from './routes/clientes.routes';
  
 const app = express();
 const PUERTO = process.env.PORT || 3000;
