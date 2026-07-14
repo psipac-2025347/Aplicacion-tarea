@@ -1,0 +1,60 @@
+:root {
+  --bg-indigo: #1b2544;
+  --bg-deep: #05060a;
+  --surface: rgba(255, 255, 255, 0.045);
+  --border-soft: rgba(201, 161, 90, 0.22);
+  --border-strong: rgba(201, 161, 90, 0.45);
+  --gold: #c9a15a;
+  --gold-soft: #e8cf9a;
+  --ivory: #ece7da;
+  --white: #ffffff;
+  --danger: #d9765a;
+
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Manrope', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--ivory);
+  background: linear-gradient(160deg, var(--bg-indigo) 0%, var(--bg-deep) 65%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--white);
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--bg-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-soft);
+  outline-offset: 2px;
+}
