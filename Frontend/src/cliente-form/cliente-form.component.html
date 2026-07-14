@@ -1,0 +1,36 @@
+<section class="modulo">
+  <div class="modulo-cabecera">
+    <h2>{{ esEdicion ? 'Editar cliente' : 'Nuevo cliente' }}</h2>
+  </div>
+
+  <p class="mensaje-error" *ngIf="error">{{ error }}</p>
+
+  <form class="formulario" [formGroup]="formulario" (ngSubmit)="guardar()">
+    <label class="campo">
+      <span>Código de cliente</span>
+      <input type="text" formControlName="codigoCliente" placeholder="Ej. CL-001" />
+    </label>
+
+    <label class="campo">
+      <span>Nombre</span>
+      <input type="text" formControlName="nombreCliente" placeholder="Nombre completo" />
+    </label>
+
+    <label class="campo">
+      <span>Dirección</span>
+      <input type="text" formControlName="direccionCliente" placeholder="Dirección" />
+    </label>
+
+    <label class="campo">
+      <span>Teléfono</span>
+      <input type="text" formControlName="telefono" placeholder="Teléfono" />
+    </label>
+
+    <div class="acciones-formulario">
+      <button type="button" class="boton-secundario" (click)="cancelar()">Cancelar</button>
+      <button type="submit" class="boton-primario" [disabled]="guardando">
+        {{ guardando ? 'Guardando…' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</section>
