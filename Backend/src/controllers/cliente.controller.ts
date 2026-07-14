@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import * as clientePersistence from '../persistence/cliente.persistence';
 
-export function listar(req: Request, res: Response): void {
-  const clientes = clientePersistence.obtenerTodos();
+export async function listar(req: Request, res: Response): Promise<void> {
+  const clientes = await clientePersistence.obtenerTodos();
   res.json(clientes);
 }
 
-export function obtener(req: Request, res: Response): void {
-  const cliente = clientePersistence.obtenerPorCodigo(req.params.codigoCliente);
+export async function obtener(req: Request, res: Response): Promise<void> {
+  const cliente = await clientePersistence.obtenerPorCodigo(req.params.codigoCliente);
   if (!cliente) {
     res.status(404).json({ mensaje: 'Cliente no encontrado' });
     return;
@@ -15,7 +15,7 @@ export function obtener(req: Request, res: Response): void {
   res.json(cliente);
 }
 
-export function crear(req: Request, res: Response): void {
+export async function crear(req: Request, res: Response): Promise<void> {
   const { codigoCliente, nombreCliente, direccionCliente, telefono } = req.body;
 
   if (!codigoCliente || !nombreCliente || !direccionCliente || !telefono) {
@@ -23,12 +23,13 @@ export function crear(req: Request, res: Response): void {
     return;
   }
 
-  if (clientePersistence.obtenerPorCodigo(codigoCliente)) {
+  const existente = await clientePersistence.obtenerPorCodigo(codigoCliente);
+  if (existente) {
     res.status(409).json({ mensaje: 'Ya existe un cliente con ese código' });
     return;
   }
 
-  const nuevoCliente = clientePersistence.crear({
+  const nuevoCliente = await clientePersistence.crear({
     codigoCliente,
     nombreCliente,
     direccionCliente,
@@ -37,7 +38,7 @@ export function crear(req: Request, res: Response): void {
   res.status(201).json(nuevoCliente);
 }
 
-export function actualizar(req: Request, res: Response): void {
+export async function actualizar(req: Request, res: Response): Promise<void> {
   const { nombreCliente, direccionCliente, telefono } = req.body;
 
   if (!nombreCliente || !direccionCliente || !telefono) {
@@ -45,7 +46,7 @@ export function actualizar(req: Request, res: Response): void {
     return;
   }
 
-  const clienteActualizado = clientePersistence.actualizar(req.params.codigoCliente, {
+  const clienteActualizado = await clientePersistence.actualizar(req.params.codigoCliente, {
     codigoCliente: req.params.codigoCliente,
     nombreCliente,
     direccionCliente,
@@ -60,8 +61,8 @@ export function actualizar(req: Request, res: Response): void {
   res.json(clienteActualizado);
 }
 
-export function eliminar(req: Request, res: Response): void {
-  const eliminado = clientePersistence.eliminar(req.params.codigoCliente);
+export async function eliminar(req: Request, res: Response): Promise<void> {
+  const eliminado = await clientePersistence.eliminar(req.params.codigoCliente);
   if (!eliminado) {
     res.status(404).json({ mensaje: 'Cliente no encontrado' });
     return;

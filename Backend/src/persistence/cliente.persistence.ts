@@ -1,5 +1,4 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import { pool } from './db';
 
 export interface Cliente {
   codigoCliente: string;
@@ -8,46 +7,51 @@ export interface Cliente {
   telefono: string;
 }
 
-const DATA_FILE = path.join(__dirname, '..', '..', 'data', 'Clientes.json');
-
-function leerArchivo(): Cliente[] {
-  const contenido = fs.readFileSync(DATA_FILE, 'utf-8');
-  return contenido.trim() ? JSON.parse(contenido) : [];
+function mapFila(fila: any): Cliente {
+  return {
+    codigoCliente: fila.codigo_cliente,
+    nombreCliente: fila.nombre_cliente,
+    direccionCliente: fila.direccion_cliente,
+    telefono: fila.telefono
+  };
 }
 
-function escribirArchivo(clientes: Cliente[]): void {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(clientes, null, 2), 'utf-8');
+export async function obtenerTodos(): Promise<Cliente[]> {
+  const resultado = await pool.query('SELECT * FROM clientes ORDER BY codigo_cliente');
+  return resultado.rows.map(mapFila);
 }
 
-export function obtenerTodos(): Cliente[] {
-  return leerArchivo();
+export async function obtenerPorCodigo(codigoCliente: string): Promise<Cliente | undefined> {
+  const resultado = await pool.query(
+    'SELECT * FROM clientes WHERE codigo_cliente = $1',
+    [codigoCliente]
+  );
+  return resultado.rows[0] ? mapFila(resultado.rows[0]) : undefined;
 }
 
-export function obtenerPorCodigo(codigoCliente: string): Cliente | undefined {
-  return leerArchivo().find(c => c.codigoCliente === codigoCliente);
+export async function crear(cliente: Cliente): Promise<Cliente> {
+  const resultado = await pool.query(
+    `INSERT INTO clientes (codigo_cliente, nombre_cliente, direccion_cliente, telefono)
+     VALUES ($1, $2, $3, $4) RETURNING *`,
+    [cliente.codigoCliente, cliente.nombreCliente, cliente.direccionCliente, cliente.telefono]
+  );
+  return mapFila(resultado.rows[0]);
 }
 
-export function crear(cliente: Cliente): Cliente {
-  const clientes = leerArchivo();
-  clientes.push(cliente);
-  escribirArchivo(clientes);
-  return cliente;
+export async function actualizar(codigoCliente: string, datos: Cliente): Promise<Cliente | undefined> {
+  const resultado = await pool.query(
+    `UPDATE clientes
+     SET nombre_cliente = $1, direccion_cliente = $2, telefono = $3
+     WHERE codigo_cliente = $4 RETURNING *`,
+    [datos.nombreCliente, datos.direccionCliente, datos.telefono, codigoCliente]
+  );
+  return resultado.rows[0] ? mapFila(resultado.rows[0]) : undefined;
 }
 
-export function actualizar(codigoCliente: string, datos: Cliente): Cliente | undefined {
-  const clientes = leerArchivo();
-  const indice = clientes.findIndex(c => c.codigoCliente === codigoCliente);
-  if (indice === -1) return undefined;
-  clientes[indice] = datos;
-  escribirArchivo(clientes);
-  return clientes[indice];
-}
-
-export function eliminar(codigoCliente: string): boolean {
-  const clientes = leerArchivo();
-  const indice = clientes.findIndex(c => c.codigoCliente === codigoCliente);
-  if (indice === -1) return false;
-  clientes.splice(indice, 1);
-  escribirArchivo(clientes);
-  return true;
+export async function eliminar(codigoCliente: string): Promise<boolean> {
+  const resultado = await pool.query(
+    'DELETE FROM clientes WHERE codigo_cliente = $1',
+    [codigoCliente]
+  );
+  return (resultado.rowCount ?? 0) > 0;
 }
