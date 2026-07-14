@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { ClienteListComponent } from './cliente-list/cliente-list.component';
 import { ClienteFormComponent } from './cliente-form/cliente-form.component';
- 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'clientes', pathMatch: 'full' },
   { path: 'clientes', component: ClienteListComponent },
@@ -9,4 +9,3 @@ export const routes: Routes = [
   { path: 'clientes/:codigoCliente/editar', component: ClienteFormComponent },
   { path: '**', redirectTo: 'clientes' }
 ];
- 
