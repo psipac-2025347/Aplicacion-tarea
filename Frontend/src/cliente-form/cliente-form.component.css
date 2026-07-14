@@ -1,0 +1,90 @@
+.modulo-cabecera {
+  margin-bottom: 1.75rem;
+}
+
+.mensaje-error {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 460px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 10px;
+  padding: 2rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.campo span {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+.campo input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 0.65rem 0.8rem;
+  color: var(--ivory);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.campo input:focus {
+  border-color: var(--gold);
+  outline: none;
+}
+
+.acciones-formulario {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.boton-primario {
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+  color: var(--bg-deep);
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.boton-primario:hover {
+  filter: brightness(1.08);
+}
+
+.boton-primario:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.boton-secundario {
+  background: none;
+  border: 1px solid var(--border-soft);
+  color: var(--ivory);
+  font-size: 0.88rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.boton-secundario:hover {
+  border-color: var(--gold);
+}
